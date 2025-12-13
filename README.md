@@ -41,8 +41,8 @@ Trasforma La macchina in un veicolo radiocomandato.
 2.  **Controllo:** Collegandosi al sito web, appare un'interfaccia con frecce direzionali.
 
 ### Considerazioni e limiti del progetto
-Inizialmente, avevamo posizionato il sensore di colore sulla parte anteriore per fargli riconoscere gli oggetti e agire di conseguenza. Tuttavia, dai test è emerso un problema pratico: il sensore leggeva correttamente il colore
-solo a 1 o 2 centimetri di distanza. Per evitare che il robot, dovendosi avvicinare così tanto, finisse per schiantarsi contro l'ostacolo, ho deciso di introdurre il sensore di ultrasuoni e cambiare gli obiettivi principali.
+Inizialmente, avevo posizionato il sensore di colore sulla parte anteriore per fargli riconoscere gli oggetti e agire di conseguenza. Tuttavia, dai test è emerso un problema pratico: il sensore leggeva correttamente il colore
+solo a 1 o 2 centimetri di distanza. Per evitare che la macchina, dovendosi avvicinare così tanto, finisse per schiantarsi contro l'ostacolo, ho deciso di introdurre il sensore di ultrasuoni e cambiare gli obiettivi principali.
 
 Inoltre, è importante notare che non sterza come una macchina vera (girando le ruote anteriori). Invece per girare a destra o a sinistra, le ruote di un lato vanno avanti mentre quelle dell'altro lato si fermano o vanno indietro.
 
