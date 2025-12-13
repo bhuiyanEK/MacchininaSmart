@@ -11,7 +11,7 @@ Il progetto ha l'obiettivo di simulare un macchina smart. La macchina è progett
 * HC-SR04 (Ultrasuoni)    
 * Servo Motore SG90 da 180°
 * TCS3200 (Sensore di colore)
-* 3 Bottoni (Rosso, Bianco, Blu) per selezionare le modalità.
+* 3 Bottoni
 * 4x Batterie 18650
 * Buck Converter
 
