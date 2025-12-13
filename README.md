@@ -1,7 +1,7 @@
 # Macchinina Smart
 
 ### Descrizione 
-Il progetto ha l'obiettivo di simulare un macchina smart (4WD). La macchina è progettato per operare in tre modalità distinte: navigazione autonoma con evitamento ostacoli, una modalità "Gara" basata sul riconoscimento dei colori (tramite cartellini), e una modalità di controllo remoto manuale tramite interfaccia Web (Wi-Fi).
+Il progetto ha l'obiettivo di simulare un macchina smart. La macchina è progettato per operare in tre modalità distinte: navigazione autonoma con evitamento ostacoli, una modalità "Gara" basata sul riconoscimento dei colori (tramite cartellini), e una modalità di controllo remoto manuale tramite interfaccia Web (Wi-Fi).
 
 ### Componenti
 * ESP32-S3
