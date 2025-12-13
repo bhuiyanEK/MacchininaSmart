@@ -35,7 +35,7 @@ Navigazione autonoma classica.
     * La macchina sceglie la direzione con più spazio libero e *sterza*.
 3.  **Durata:** La modalità dura 30 secondi, poi si ferma.
 
-#### C. Modalità WI-FI (Pulsante Blu)
+#### C. Modalità WI-FI (Bottone Blu)
 Trasforma La macchina in un veicolo radiocomandato.
 1.  **Utilizzo** L'ESP32 crea una rete Wi-Fi con tutte le informazioni per collegarsi sullo schermo.
 2.  **Controllo:** Collegandosi al sito web, appare un'interfaccia con frecce direzionali.
