@@ -15,6 +15,16 @@ Il progetto ha l'obiettivo di simulare un macchina smart. La macchina è progett
 * 4x Batterie 18650
 * Buck Converter
 
+### Librerie 
+```ino
+#include <ESP32Servo.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include <WiFi.h>
+#include <WebServer.h>
+```
+
 ### Modalità di Funzionamento
 
 Il robot dispone di tre pulsanti fisici che attivano tre logiche differenti:
