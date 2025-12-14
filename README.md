@@ -29,7 +29,7 @@ Il progetto ha l'obiettivo di simulare un macchina smart. La macchina è progett
 
 ### Modalità di Funzionamento
 
-Il robot dispone di tre pulsanti fisici che attivano tre logiche differenti:
+La macchina dispone di tre pulsanti fisici che attivano tre logiche differenti:
 
 #### A. Modalità GARA (Bottone Rosso)
 La particolarità di questa macchina è che il sensore di colore non guarda a terra, ma di lato (sulla fiancata)
