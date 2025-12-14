@@ -44,7 +44,7 @@ const char index_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE HTML><html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <title>ROBOT CONTROLLER</title>
+  <title>CONTROLLER</title>
   <style>
     body { background-color: #121212; color: white; font-family: sans-serif; text-align: center; overflow: hidden; }
     h2 { margin: 10px; }
@@ -62,7 +62,6 @@ const char index_html[] PROGMEM = R"rawliteral(
   </style>
 </head>
 <body>
-  <h2>ROBOT WIFI</h2>
   <div class="container">
     <div class="row">
       <div class="btn" ontouchstart="mv('fwd')" ontouchend="stp()" onmousedown="mv('fwd')" onmouseup="stp()">&#8593;</div>
@@ -79,7 +78,6 @@ const char index_html[] PROGMEM = R"rawliteral(
   <script>
     function mv(dir) { fetch('/' + dir); }
     function stp() { fetch('/stop'); }
-    // Prevenzione menu contestuale su mobile
     document.addEventListener('contextmenu', event => event.preventDefault());
   </script>
 </body>
@@ -110,9 +108,7 @@ int gameMode = 0;
 enum RobotState {IDLE, READY, RUNNING, STOPPED, WIFI_MODE};
 RobotState robotState = STOPPED;
 
-
 const char* ssid = "ROBOT_ESP32";
-const char* password = "password123"; 
 
 int speedForward = 85;   
 int speedTurn = 85;      
@@ -123,6 +119,14 @@ void IRAM_ATTR handleBtn1() { if (millis() - lastPress1 > debounceDelay) { btn1P
 void IRAM_ATTR handleBtn2() { if (millis() - lastPress2 > debounceDelay) { btn2Pressed = true; lastPress2 = millis(); } }
 void IRAM_ATTR handleBtn3() { if (millis() - lastPress3 > debounceDelay) { btn3Pressed = true; lastPress3 = millis(); } }
 
+String generatePassword(int len) {
+  const char chars[] = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; 
+  String p = "";
+  for(int i = 0; i < len; i++) {
+    p += chars[random(0, sizeof(chars) - 1)];
+  }
+  return p;
+}
 
 void stopMotors() {
   analogWrite(ENA, 0); analogWrite(ENB, 0);
@@ -257,34 +261,38 @@ void loop() {
   }
 
   if(btn3Pressed) {
-    btn3Pressed = false; stopMotors();
-    gameMode = 3;
-    robotState = WIFI_MODE;
-    
-    showText("AVVIO WIFI...");
-    WiFi.softAP(ssid, password);
-    IPAddress myIP = WiFi.softAPIP();
+      btn3Pressed = false; stopMotors();
+      gameMode = 3;
+      robotState = WIFI_MODE;
 
-    server.on("/", handleRoot);
-    server.on("/fwd", handleFwd);
-    server.on("/bwd", handleBwd);
-    server.on("/lft", handleLft);
-    server.on("/rgt", handleRgt);
-    server.on("/stop", handleStop);
-    server.begin();
+      showText("AVVIO WIFI...");
 
-    display.clearDisplay();
-    display.setTextSize(1);
-    display.setCursor(0,0);  display.println("RETE: " + String(ssid));
-    display.setCursor(0,10); display.println("PASS: " + String(password));
-    display.setCursor(0,20); display.println("IP: " + myIP.toString());
-    display.display();
+      String wifiPassword = generatePassword(8);   
+      WiFi.softAP(ssid, wifiPassword.c_str());     
+
+      IPAddress myIP = WiFi.softAPIP();
+
+      server.on("/", handleRoot);
+      server.on("/fwd", handleFwd);
+      server.on("/bwd", handleBwd);
+      server.on("/lft", handleLft);
+      server.on("/rgt", handleRgt);
+      server.on("/stop", handleStop);
+      server.begin();
+
+      display.clearDisplay();
+      display.setTextSize(1);
+      display.setCursor(0,0);  display.println("RETE: " + String(ssid));
+      display.setCursor(0,10); display.println("PASS: " + wifiPassword);  
+      display.setCursor(0,20); display.println("IP: " + myIP.toString());
+      display.display();
   }
 
 
   if(robotState == WIFI_MODE) {
     server.handleClient();
     return; 
+  }
 
   if(robotState == STOPPED) return;
 
