@@ -14,6 +14,8 @@ Il progetto ha l'obiettivo di simulare un macchina smart. La macchina è progett
 * 3 Bottoni
 * 4x Batterie 18650
 * Buck Converter
+* Scheda di espansione
+* Interruttore
 
 ### Librerie 
 ```ino
@@ -57,6 +59,8 @@ solo a 1 o 2 centimetri di distanza. Per evitare che la macchina, dovendosi avvi
 Inoltre, è importante notare che non sterza come una macchina vera (girando le ruote anteriori). Invece per girare a destra o a sinistra, le ruote di un lato vanno avanti mentre quelle dell'altro lato si fermano o vanno indietro.
 
 Infine, un problema è stato riscontrato durante il conto alla rovescia: in questa fase il sistema non può aggiornare i sensori o i motori in tempo reale, pertanto il processo non risulta pienamente ottimizzato.
+
+Per il futuro, prevedo l’integrazione del sensore di luce rivolto verso il basso, che permetta di seguire un percorso tracciato con linee colorate, aggiungendo così una funzionalità in più alla macchinina smart.
 
 ### Licenza
 GPLv3
