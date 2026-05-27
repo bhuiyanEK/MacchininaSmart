@@ -1,14 +1,14 @@
 # Macchinina Smart
 
-### Descrizione 
-Il progetto ha come obiettivo la realizzazione di una macchina smart in grado di funzionare in tre modalità diverse: una modalità di navigazione autonoma con evitamento degli ostacoli, una modalità “Gara” basata sul riconoscimento dei colori tramite cartellini, e una modalità di controllo manuale remoto attraverso un’interfaccia Web via Wi-Fi.
+### Descrizione
+Il progetto ha come obiettivo la realizzazione di una macchina smart in grado di funzionare in tre modalità diverse: una modalità di navigazione autonoma con evitamento degli ostacoli, una modalità "Gara" basata sul riconoscimento dei colori tramite cartellini, e una modalità di controllo manuale remoto attraverso un'interfaccia Web via Wi-Fi.
 
 ### Componenti
 * ESP32-S3
 * Modulo L298N
-* 4x Motori DC 
-* Schermo OLED 128x32   
-* HC-SR04 (Ultrasuoni)    
+* 4x Motori DC
+* Schermo OLED 128x32
+* HC-SR04 (Ultrasuoni)
 * Servo Motore SG90 da 180°
 * TCS3200 (Sensore di colore)
 * 3 Bottoni
@@ -17,7 +17,7 @@ Il progetto ha come obiettivo la realizzazione di una macchina smart in grado di
 * Scheda di espansione
 * Interruttore
 
-### Librerie 
+### Librerie
 ```ino
 #include <ESP32Servo.h>
 #include <Wire.h>
@@ -27,16 +27,31 @@ Il progetto ha come obiettivo la realizzazione di una macchina smart in grado di
 #include <WebServer.h>
 ```
 
+### Architettura Software — FreeRTOS Multi-task
+
+Il firmware è strutturato attorno a **3 task FreeRTOS** che girano in parallelo sui due core dell'ESP32-S3. L'accesso al display è protetto da un **mutex** per evitare conflitti tra task.
+
+| Task | Core | Priorità | Responsabilità |
+|---|---|---|---|
+| `TaskTimer` | 0 | 1 | Aggiorna il countdown sul display ogni 500 ms; ferma i motori allo scadere del tempo |
+| `TaskWiFi` | 0 | 1 | Gestisce le richieste HTTP del server web |
+| `TaskMacchinina` | 1 | 2 | Logica principale: bottoni, sensore colore, evitamento ostacoli |
+
+Questa struttura risolve il problema del conto alla rovescia bloccante presente nelle versioni precedenti: timer, Wi-Fi e logica robot ora si aggiornano in modo indipendente e senza interferire tra loro.
+
+---
+
 ### Modalità di Funzionamento
 
 La macchina dispone di tre pulsanti fisici che attivano tre logiche differenti:
 
 #### A. Modalità GARA (Bottone Rosso)
-La particolarità di questa macchina è che il sensore di colore non guarda a terra, ma di lato (sulla fiancata)
-1.  **Attesa/Pronto** La macchina rimane immobile (attesa) e aspetta il colore **rosso** per prepararsi.
-2.  **Partenza:** Se il sensore rileva il verde per almeno 1 secondo, la macchina parte.
-3.  **Corsa:** La macchina naviga autonomamente evitando gli ostacoli (sfruttando sempre il sensore ultrasuoni) per 60 secondi.
-4.  **Fine:** Se durante la corsa il sensore legge il colore **blu**, la macchina si ferma immediatamente. Altrimenti, si ferma allo scadere del tempo.
+La particolarità di questa macchina è che il sensore di colore non guarda a terra, ma di lato (sulla fiancata).
+
+1. **Attesa/Pronto:** La macchina rimane immobile e aspetta il colore **rosso** per prepararsi.
+2. **Partenza:** Se il sensore rileva il **verde** per almeno 1 secondo, la macchina parte.
+3. **Corsa:** La macchina naviga autonomamente evitando gli ostacoli (tramite il sensore a ultrasuoni) per 60 secondi.
+4. **Fine:** Se durante la corsa il sensore legge il colore **blu**, la macchina si ferma immediatamente. Altrimenti, si ferma allo scadere del tempo.
 
 #### B. Modalità AUTOMATICA (Bottone Bianco)
 Navigazione autonoma classica.
@@ -53,12 +68,11 @@ Trasforma La macchina in un veicolo radiocomandato.
 2.  **Controllo:** Collegandosi al sito web, appare un'interfaccia con frecce direzionali.
 
 ### Considerazioni e limiti del progetto
+
 Inizialmente, avevo posizionato il sensore di colore sulla parte anteriore per fargli riconoscere gli oggetti e agire di conseguenza. Tuttavia, dai test è emerso un problema pratico: il sensore leggeva correttamente il colore
 solo a 1 o 2 centimetri di distanza. Per evitare che la macchina, dovendosi avvicinare così tanto, finisse per schiantarsi contro l'ostacolo, ho deciso di introdurre il sensore di ultrasuoni e cambiare gli obiettivi principali.
 
 Inoltre, è importante notare che non sterza come una macchina vera (girando le ruote anteriori). Invece per girare a destra o a sinistra, le ruote di un lato vanno avanti mentre quelle dell'altro lato si fermano o vanno indietro.
-
-Infine, un problema è stato riscontrato durante il conto alla rovescia: in questa fase il sistema non può aggiornare i sensori o i motori in tempo reale, pertanto il processo non risulta pienamente ottimizzato.
 
 Per il futuro, prevedo l’integrazione del sensore di luce rivolto verso il basso, che permetta di seguire un percorso tracciato con linee colorate, aggiungendo così una funzionalità in più alla macchinina smart.
 
